@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">presentation</a> &gt; <span class="el_source">MenuPage.java</span></div><h1>MenuPage.java</h1><pre class="source lang-java linenums">package presentation;
+
+
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
+import model.modules.FoodOrder;
+import model.modules.Menu;
+import model.services.FoodOrderServices;
+
+/**
+ *
+ * @author maxim
+ */
+public class MenuPage extends javax.swing.JFrame {
+<span class="nc" id="L36">    List&lt;FoodOrder&gt; orders = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L37">    Map&lt;String, Object&gt; userInfo = new HashMap();</span>
+    int restaurantID;
+    String restaurantName;
+    
+<span class="nc" id="L41">    double totalCost = 0;</span>
+    /**
+     * Creates new form RestaurantsPage
+     */
+<span class="nc" id="L45">    public MenuPage(){</span>
+<span class="nc" id="L46">        Color col = new Color(204,204,204);</span>
+<span class="nc" id="L47">        getContentPane().setBackground(col);</span>
+        
+<span class="nc" id="L49">    }</span>
+
+<span class="nc" id="L51">    public MenuPage(Map&lt;String, Object&gt; userInfo, int restaurantID, String restaurantName){</span>
+        try {
+<span class="nc" id="L53">            generateOrderList(restaurantID, restaurantName);</span>
+<span class="nc" id="L54">        } catch (SQLException ex) {</span>
+<span class="nc" id="L55">            Logger.getLogger(MenuPage.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L56">        }</span>
+<span class="nc" id="L57">        this.userInfo = userInfo;</span>
+<span class="nc" id="L58">        this.restaurantID = restaurantID;</span>
+<span class="nc" id="L59">        this.restaurantName = restaurantName;</span>
+<span class="nc" id="L60">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L61">        this.setTitle(&quot;Menu Page&quot;);</span>
+<span class="nc" id="L62">        costLabel.setName(&quot;costLabel&quot;);</span>
+<span class="nc" id="L63">    }</span>
+ 
+    
+    
+    private int AddButton(int foodID,String foodname, double foodCost){
+        
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        for(FoodOrder order : orders){</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            if(order.foodID() == foodID)</span>
+            {
+                //System.out.println(foodCost);
+<span class="nc" id="L73">                this.totalCost = this.totalCost + foodCost;</span>
+                //costLabel.setText(this.);
+<span class="nc" id="L75">                order.setAmount(order.amount() + 1);</span>
+<span class="nc" id="L76">                order.setCost(order.cost() + foodCost);</span>
+<span class="nc" id="L77">                return 0;</span>
+            }
+<span class="nc" id="L79">        }</span>
+        //System.out.println(totalCost);
+<span class="nc" id="L81">        this.totalCost = this.totalCost + foodCost;</span>
+        //System.out.println(totalCost);
+<span class="nc" id="L83">        orders.add(new FoodOrder(foodID, foodname, 1, foodCost));</span>
+<span class="nc" id="L84">        return 1;</span>
+    }
+   
+    
+    private int SubtractButton(int foodID, double foodCost){
+<span class="nc" id="L89">        int index = 0;</span>
+<span class="nc" id="L90">        boolean temp = false;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for(FoodOrder order : orders){</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if(order.foodID() == foodID)</span>
+            {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">                if(order.amount() &gt; 1)</span>
+                {
+                    //System.out.println(foodCost);
+<span class="nc" id="L97">                    this.totalCost = this.totalCost - foodCost;</span>
+<span class="nc" id="L98">                    order.setAmount(order.amount() - 1);</span>
+<span class="nc" id="L99">                    return 0;</span>
+                }
+                else
+                {
+<span class="nc" id="L103">                    index = orders.indexOf(order);</span>
+<span class="nc" id="L104">                    temp = true;</span>
+<span class="nc" id="L105">                    this.totalCost = this.totalCost - foodCost;</span>
+                }
+            }
+<span class="nc" id="L108">        }</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if(temp)</span>
+<span class="nc" id="L110">            orders.remove(index);</span>
+<span class="nc" id="L111">        return 1;</span>
+    }
+    
+    
+    
+    private void generateOrderList(int restaurantID, String restaurantName) throws SQLException{
+<span class="nc" id="L117">        List&lt;Menu&gt; menu = FoodOrderServices.getRestaurantMenu(restaurantID);</span>
+        
+        
+        //
+<span class="nc" id="L121">        setLayout(new BorderLayout()); // Set layout for the JFrame</span>
+
+        // Create a JPanel with a vertical BoxLayout to contain each item and its button
+<span class="nc" id="L124">        JPanel itemsPanel = new JPanel();</span>
+<span class="nc" id="L125">        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.Y_AXIS));</span>
+
+        // Scroll Pane in case of many items
+<span class="nc" id="L128">        JScrollPane scrollPane = new JScrollPane(itemsPanel);</span>
+<span class="nc" id="L129">        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
+
+        // Panel to hold the scroll pane
+<span class="nc" id="L132">        JPanel containerPanel = new JPanel(new BorderLayout());</span>
+<span class="nc" id="L133">        containerPanel.add(scrollPane, BorderLayout.CENTER);</span>
+<span class="nc" id="L134">        containerPanel.setPreferredSize(new Dimension(375, 300)); // Set preferred size</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (Menu dish : menu) {</span>
+<span class="nc" id="L137">            addItem(dish.ID(), dish.cost(), dish.name(), itemsPanel);</span>
+<span class="nc" id="L138">        }</span>
+
+        // Additional components
+<span class="nc" id="L141">        JLabel header = new JLabel(restaurantName + &quot; meniu&quot;, SwingConstants.CENTER);</span>
+<span class="nc" id="L142">        JButton checkoutButton = new JButton(&quot;Pirkti&quot;);</span>
+<span class="nc" id="L143">        checkoutButton.setName(&quot;proceedButton&quot;);</span>
+<span class="nc" id="L144">        JButton returnButton = new JButton(&quot;Atgal&quot;);</span>
+<span class="nc" id="L145">        returnButton.setName(&quot;backButton&quot;);</span>
+        
+<span class="nc" id="L147">        returnButton.addActionListener(e -&gt; {</span>
+            try {
+<span class="nc" id="L149">                returnPress();</span>
+<span class="nc" id="L150">            } catch (SQLException ex) {</span>
+<span class="nc" id="L151">                Logger.getLogger(MenuPage.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L152">            }</span>
+<span class="nc" id="L153">        });</span>
+        
+<span class="nc" id="L155">        checkoutButton.addActionListener(e -&gt; {</span>
+<span class="nc" id="L156">            checkoutPress();</span>
+<span class="nc" id="L157">        });</span>
+        
+        
+<span class="nc" id="L160">        JPanel bottomPanel = new JPanel(new BorderLayout());</span>
+        //bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); // Align to the right
+
+<span class="nc" id="L163">        this.costLabel = new JLabel(&quot;Suma: &quot; + new Formatter().format(&quot;%.2f&quot;, this.totalCost).toString());</span>
+        
+<span class="nc" id="L165">        JLabel textLabel = new JLabel(&quot;Suma:&quot;);</span>
+<span class="nc" id="L166">        bottomPanel.add(returnButton, BorderLayout.WEST);</span>
+<span class="nc" id="L167">        bottomPanel.add(costLabel, BorderLayout.CENTER);</span>
+        //bottomPanel.add(costLabel, BorderLayout.CENTER); // Add to the left of the button
+<span class="nc" id="L169">        bottomPanel.add(checkoutButton, BorderLayout.EAST);</span>
+
+        // Add the panels to the JFrame
+<span class="nc" id="L172">        add(header, BorderLayout.NORTH);</span>
+<span class="nc" id="L173">        add(containerPanel, BorderLayout.CENTER);</span>
+<span class="nc" id="L174">        add(bottomPanel, BorderLayout.SOUTH);</span>
+        //add(checkoutButton, BorderLayout.SOUTH);
+
+<span class="nc" id="L177">        pack();</span>
+<span class="nc" id="L178">        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L179">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L180">        setVisible(true);</span>
+        
+        
+<span class="nc" id="L183">    }</span>
+    
+    private void checkoutPress(){
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if(orders.size() != 0)</span>
+        {
+<span class="nc" id="L188">            int option = JOptionPane.showConfirmDialog(null, &quot;Ar norite pristatymą į namus?&quot;, &quot;Pristatymas&quot;, JOptionPane.YES_NO_OPTION);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (option == JOptionPane.YES_OPTION) {</span>
+<span class="nc" id="L190">                new DeliveryPage(userInfo, restaurantID, orders, restaurantName).setVisible(true);</span>
+<span class="nc" id="L191">                this.setVisible(false);</span>
+            } else {
+<span class="nc" id="L193">                new CheckoutPage(userInfo, restaurantID, orders, restaurantName).setVisible(true);</span>
+<span class="nc" id="L194">                this.setVisible(false);</span>
+            }
+
+<span class="nc" id="L197">        }</span>
+        else
+<span class="nc" id="L199">            JOptionPane.showMessageDialog(null, &quot;Jūsų užsakymas yra tusčias!&quot;);</span>
+<span class="nc" id="L200">    }</span>
+    
+    private String newAmountAdd(int id,String foodname, double cost, String amount){
+<span class="nc" id="L203">        AddButton(id, foodname, cost);</span>
+<span class="nc" id="L204">        this.costLabel.setText(&quot;Suma: &quot; + new Formatter().format(&quot;%.2f&quot;, this.totalCost).toString());</span>
+<span class="nc" id="L205">        int temp = Integer.parseInt(amount);</span>
+<span class="nc" id="L206">        String newAmount = Integer.toString( temp + 1);</span>
+<span class="nc" id="L207">        return newAmount;</span>
+    }
+    
+    
+    private String newAmountSubtract(int id, double cost, String amount){
+<span class="nc" id="L212">        SubtractButton(id, cost);</span>
+<span class="nc" id="L213">        this.costLabel.setText(new Formatter().format(&quot;%.2f&quot;, this.totalCost).toString());</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        if(costLabel.getText().charAt(0) == '-')</span>
+<span class="nc" id="L215">            this.costLabel.setText(costLabel.getText().substring(1));</span>
+        //System.out.println(totalCost);
+<span class="nc" id="L217">        this.costLabel.setText(&quot;Suma: &quot; + costLabel.getText());</span>
+<span class="nc" id="L218">        int temp = Integer.parseInt(amount);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if(temp == 0)</span>
+<span class="nc" id="L220">            return Integer.toString( temp);</span>
+        else
+<span class="nc" id="L222">            return Integer.toString( temp - 1);</span>
+    }
+
+    
+    private void returnPress() throws SQLException{
+<span class="nc" id="L227">        new RestaurantsPage(userInfo).setVisible(true);</span>
+<span class="nc" id="L228">        this.setVisible(false);</span>
+<span class="nc" id="L229">    }</span>
+    
+    private void addItem(int id, double cost,  String item, JPanel itemsPanel) {
+<span class="nc" id="L232">        JPanel itemPanel = new JPanel(new BorderLayout());</span>
+
+<span class="nc" id="L234">    JLabel idLabel = new JLabel(Integer.toString( id));</span>
+    //idLabel.setVisible(false);
+    
+<span class="nc" id="L237">    Formatter formatter = new Formatter();</span>
+<span class="nc" id="L238">    formatter.format(&quot;%.2f&quot;, cost);</span>
+    
+<span class="nc" id="L240">    JLabel itemLabel = new JLabel(item + &quot; &quot; + formatter.toString() + &quot; Eur&quot;);</span>
+<span class="nc" id="L241">    itemLabel.setVerticalAlignment(SwingConstants.TOP);</span>
+<span class="nc" id="L242">    itemPanel.add(itemLabel, BorderLayout.WEST);</span>
+
+    // Create a new panel for the buttons
+<span class="nc" id="L245">    JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));</span>
+<span class="nc" id="L246">    JButton buyButton = new JButton(&quot;+&quot;);</span>
+<span class="nc" id="L247">    JLabel amountLabel = new JLabel(&quot;0&quot;);</span>
+<span class="nc" id="L248">    amountLabel.setName(item + &quot;amountLabel&quot;);</span>
+<span class="nc" id="L249">    JButton subtractButton = new JButton(&quot;-&quot;);</span>
+<span class="nc" id="L250">    buyButton.setName(item + &quot;+&quot;);</span>
+<span class="nc" id="L251">    subtractButton.setName(item + &quot;-&quot;);</span>
+<span class="nc" id="L252">    buyButton.addActionListener(e -&gt; amountLabel.setText(newAmountAdd(id, item, cost, amountLabel.getText())));</span>
+<span class="nc" id="L253">    subtractButton.addActionListener(e -&gt; amountLabel.setText(newAmountSubtract(id, cost, amountLabel.getText())));</span>
+
+<span class="nc" id="L255">    buttonsPanel.add(subtractButton);</span>
+<span class="nc" id="L256">    buttonsPanel.add(amountLabel);</span>
+<span class="nc" id="L257">    buttonsPanel.add(buyButton);</span>
+
+    // Add the buttons panel to the right of the item panel
+<span class="nc" id="L260">    itemPanel.add(buttonsPanel, BorderLayout.EAST);</span>
+
+<span class="nc" id="L262">    itemsPanel.add(itemPanel);</span>
+        
+        
+        
+<span class="nc" id="L266">    }</span>
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L283">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+
+<span class="nc" id="L285">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());</span>
+<span class="nc" id="L286">        getContentPane().setLayout(layout);</span>
+<span class="nc" id="L287">        layout.setHorizontalGroup(</span>
+<span class="nc" id="L288">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L289">            .addGap(0, 400, Short.MAX_VALUE)</span>
+        );
+<span class="nc" id="L291">        layout.setVerticalGroup(</span>
+<span class="nc" id="L292">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L293">            .addGap(0, 300, Short.MAX_VALUE)</span>
+        );
+
+<span class="nc" id="L296">        pack();</span>
+<span class="nc" id="L297">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L311">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L312">                    break;</span>
+                }
+            }
+<span class="nc" id="L315">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L316">            java.util.logging.Logger.getLogger(MenuPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L317">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L318">            java.util.logging.Logger.getLogger(MenuPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L319">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L320">            java.util.logging.Logger.getLogger(MenuPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L321">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L322">            java.util.logging.Logger.getLogger(MenuPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L323">        }</span>
+        //&lt;/editor-fold&gt;
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the form */
+<span class="nc" id="L328">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L330">            }</span>
+        });
+<span class="nc" id="L332">    }</span>
+private javax.swing.JLabel costLabel;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

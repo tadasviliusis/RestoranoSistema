@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MySQL.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">MySQL.java</span></div><h1>MySQL.java</h1><pre class="source lang-java linenums">package data;
+
+import java.sql.*;
+import java.util.Map;
+import java.util.StringJoiner;
+
+<span class="nc" id="L7">public class MySQL {</span>
+
+<span class="nc" id="L9">    static private String url = &quot;jdbc:mysql://localhost:3306/restoranoduombaze&quot;;</span>
+<span class="nc" id="L10">    static private String user = &quot;root&quot;;</span>
+<span class="nc" id="L11">    static private String password = &quot;L580jf&amp;Ll&quot;;</span>
+    public static ResultSet getData(String query) throws SQLException {
+<span class="nc" id="L13">        Connection connection = DriverManager.getConnection(url, user, password);</span>
+
+<span class="nc" id="L15">        Statement statement = connection.createStatement();</span>
+
+<span class="nc" id="L17">        ResultSet resultSet = statement.executeQuery(query);</span>
+
+<span class="nc" id="L19">        return resultSet;</span>
+    }
+
+    public static String insertData(String tableName, Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L23">        StringJoiner columns = new StringJoiner(&quot;, &quot;);</span>
+<span class="nc" id="L24">        StringJoiner placeholders = new StringJoiner(&quot;, &quot;);</span>
+
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        for (String column : values.keySet()) {</span>
+<span class="nc" id="L27">            columns.add(column);</span>
+<span class="nc" id="L28">            placeholders.add(&quot;?&quot;);</span>
+<span class="nc" id="L29">        }</span>
+
+<span class="nc" id="L31">        String sql = &quot;INSERT INTO &quot; + tableName + &quot; (&quot; + columns + &quot;) VALUES (&quot; + placeholders + &quot;)&quot;;</span>
+
+<span class="nc" id="L33">        Connection connection = DriverManager.getConnection(url, user, password);</span>
+        
+<span class="nc" id="L35">        connection.setAutoCommit(false);</span>
+
+<span class="nc" id="L37">        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+
+<span class="nc" id="L39">        int index = 1;</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (Object value : values.values()) {</span>
+<span class="nc" id="L41">            statement.setObject(index++, value);</span>
+<span class="nc" id="L42">        }</span>
+
+<span class="nc" id="L44">        statement.executeUpdate();</span>
+
+<span class="nc" id="L46">        ResultSet keys = statement.getGeneratedKeys();</span>
+<span class="nc" id="L47">        String newID = &quot;&quot;;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (keys.next()) {</span>
+<span class="nc" id="L49">            newID = keys.getString(1);</span>
+        }
+
+<span class="nc" id="L52">        connection.commit();</span>
+<span class="nc" id="L53">        statement.close();</span>
+<span class="nc" id="L54">        connection.close();</span>
+<span class="nc" id="L55">        return newID;</span>
+    }
+
+    public static void updateData(String tableName, Map&lt;String, Object&gt; newValues, Map&lt;String, Object&gt; whereValues) throws SQLException {
+<span class="nc" id="L59">        StringJoiner setClause = new StringJoiner(&quot;, &quot;);</span>
+
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        for (String column : newValues.keySet()) {</span>
+<span class="nc" id="L62">            setClause.add(column + &quot; = ?&quot;);</span>
+<span class="nc" id="L63">        }</span>
+
+<span class="nc" id="L65">        StringJoiner whereClause = new StringJoiner(&quot; AND &quot;);</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for (String column : whereValues.keySet()) {</span>
+<span class="nc" id="L68">            whereClause.add(column + &quot; = ?&quot;);</span>
+<span class="nc" id="L69">        }</span>
+
+<span class="nc" id="L71">        Connection connection = DriverManager.getConnection(url, user, password);</span>
+        
+<span class="nc" id="L73">        String sql = &quot;UPDATE &quot; + tableName + &quot; SET &quot; + setClause + &quot; WHERE &quot; + whereClause;</span>
+<span class="nc" id="L74">        PreparedStatement statement = connection.prepareStatement(sql);</span>
+
+<span class="nc" id="L76">        int index = 1;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        for (Object value : newValues.values()) {</span>
+<span class="nc" id="L78">            statement.setObject(index++, value);</span>
+<span class="nc" id="L79">        }</span>
+
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for (Object value : whereValues.values()) {</span>
+<span class="nc" id="L82">            statement.setObject(index++, value);</span>
+<span class="nc" id="L83">        }</span>
+
+<span class="nc" id="L85">        statement.executeUpdate();</span>
+<span class="nc" id="L86">        statement.close();</span>
+<span class="nc" id="L87">    }</span>
+
+    public static void deleteData(String query) throws SQLException {
+<span class="nc" id="L90">        Connection connection = DriverManager.getConnection(url, user, password);</span>
+        
+<span class="nc" id="L92">        PreparedStatement statement = connection.prepareStatement(query);</span>
+
+<span class="nc" id="L94">        statement.executeUpdate();</span>
+
+<span class="nc" id="L96">        statement.close();</span>
+
+<span class="nc" id="L98">        connection.close();</span>
+<span class="nc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

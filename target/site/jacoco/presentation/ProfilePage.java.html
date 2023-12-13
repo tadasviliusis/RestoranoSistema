@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfilePage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">presentation</a> &gt; <span class="el_source">ProfilePage.java</span></div><h1>ProfilePage.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package presentation;
+
+import java.awt.Color;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import model.services.UserServices;
+
+/**
+ *
+ * @author viliu
+ */
+public class ProfilePage extends javax.swing.JFrame {
+<span class="nc" id="L21">        Map&lt;String, Object&gt; userInfo = new HashMap();</span>
+<span class="nc" id="L22">        Map&lt;String, Object&gt; loginInfo = new HashMap();</span>
+    /**
+     * Creates new form ProfilePage
+     */
+<span class="nc" id="L26">    public ProfilePage() {</span>
+<span class="nc" id="L27">        initComponents();</span>
+       // getContentPane().setBackground(white);
+<span class="nc" id="L29">        Color col = new Color(204,204,204);</span>
+<span class="nc" id="L30">        getContentPane().setBackground(col);</span>
+     
+<span class="nc" id="L32">    }</span>
+<span class="nc" id="L33">    public ProfilePage(Map&lt;String, Object&gt; userInfo) throws SQLException {</span>
+<span class="nc" id="L34">        initComponents();</span>
+<span class="nc" id="L35">        this.userInfo = userInfo;</span>
+<span class="nc" id="L36">        fillUserInfo();</span>
+<span class="nc" id="L37">        saveButton.setVisible(false);</span>
+<span class="nc" id="L38">        emailError.setVisible(false);</span>
+<span class="nc" id="L39">        tlNumberError.setVisible(false);</span>
+<span class="nc" id="L40">        emptyFieldError.setVisible(false);</span>
+<span class="nc" id="L41">        setLocationRelativeTo(null);</span>
+
+<span class="nc" id="L43">        this.setTitle(&quot;Profile Page&quot;);</span>
+<span class="nc" id="L44">        nameField.setName(&quot;nameField&quot;);</span>
+<span class="nc" id="L45">        lastNameField.setName(&quot;lastNameField&quot;);</span>
+<span class="nc" id="L46">        tlNumberField.setName(&quot;tlNumberField&quot;);</span>
+<span class="nc" id="L47">        addressField.setName(&quot;addressField&quot;);</span>
+<span class="nc" id="L48">        emailField.setName(&quot;emailField&quot;);</span>
+<span class="nc" id="L49">        editButton.setName(&quot;editButton&quot;);</span>
+<span class="nc" id="L50">        logOffButton.setName(&quot;logOffButton&quot;);</span>
+<span class="nc" id="L51">        saveButton.setName(&quot;saveButton&quot;);</span>
+<span class="nc" id="L52">        backButton.setName(&quot;backButton&quot;);</span>
+
+<span class="nc" id="L54">        emailError.setName(&quot;emailError&quot;);</span>
+<span class="nc" id="L55">        emptyFieldError.setName(&quot;emptyFieldError&quot;);</span>
+<span class="nc" id="L56">        tlNumberError.setName(&quot;tlNumberError&quot;);</span>
+        
+<span class="nc" id="L58">    }</span>
+    private void fillUserInfo() throws SQLException {
+<span class="nc" id="L60">        loginInfo = UserServices.getLoginInfo(userInfo.get(&quot;ID&quot;).toString());</span>
+   
+        
+<span class="nc" id="L63">        nameField.setText(userInfo.get(&quot;vardas&quot;).toString());</span>
+<span class="nc" id="L64">        nameField.enable(false);</span>
+<span class="nc" id="L65">        lastNameField.setText(userInfo.get(&quot;pavarde&quot;).toString());</span>
+<span class="nc" id="L66">        lastNameField.enable(false);</span>
+<span class="nc" id="L67">        tlNumberField.setText(userInfo.get(&quot;tl.numeris&quot;).toString());</span>
+<span class="nc" id="L68">        tlNumberField.enable(false);</span>
+<span class="nc" id="L69">        emailField.setText(userInfo.get(&quot;el.pastas&quot;).toString());</span>
+<span class="nc" id="L70">        emailField.enable(false);</span>
+<span class="nc" id="L71">        addressField.setText(userInfo.get(&quot;adresas&quot;).toString());</span>
+<span class="nc" id="L72">        addressField.enable(false);</span>
+        
+<span class="nc" id="L74">    }</span>
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L85">        nameLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L86">        lastNameLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L87">        tlNumberLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L88">        emailLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L89">        addressLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L90">        editButton = new javax.swing.JButton();</span>
+<span class="nc" id="L91">        tlNumberField = new javax.swing.JTextField();</span>
+<span class="nc" id="L92">        saveButton = new javax.swing.JButton();</span>
+<span class="nc" id="L93">        emailField = new javax.swing.JTextField();</span>
+<span class="nc" id="L94">        addressField = new javax.swing.JTextField();</span>
+<span class="nc" id="L95">        nameField = new javax.swing.JTextField();</span>
+<span class="nc" id="L96">        lastNameField = new javax.swing.JTextField();</span>
+<span class="nc" id="L97">        backButton = new javax.swing.JButton();</span>
+<span class="nc" id="L98">        profileIcon = new javax.swing.JLabel();</span>
+<span class="nc" id="L99">        emptyFieldError = new javax.swing.JLabel();</span>
+<span class="nc" id="L100">        tlNumberError = new javax.swing.JLabel();</span>
+<span class="nc" id="L101">        emailError = new javax.swing.JLabel();</span>
+<span class="nc" id="L102">        logOffButton = new javax.swing.JButton();</span>
+
+<span class="nc" id="L104">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+
+<span class="nc" id="L106">        nameLabel.setText(&quot;Vardas:&quot;);</span>
+
+<span class="nc" id="L108">        lastNameLabel.setText(&quot;Pavardė:&quot;);</span>
+
+<span class="nc" id="L110">        tlNumberLabel.setText(&quot;Tel.nr:&quot;);</span>
+
+<span class="nc" id="L112">        emailLabel.setText(&quot;El.paštas:&quot;);</span>
+
+<span class="nc" id="L114">        addressLabel.setText(&quot;Adresas&quot;);</span>
+
+<span class="nc" id="L116">        editButton.setText(&quot;Redaguoti&quot;);</span>
+<span class="nc" id="L117">        editButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L119">                editButtonActionPerformed(evt);</span>
+<span class="nc" id="L120">            }</span>
+        });
+
+<span class="nc" id="L123">        saveButton.setText(&quot;Išsaugoti&quot;);</span>
+<span class="nc" id="L124">        saveButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L126">                saveButtonActionPerformed(evt);</span>
+<span class="nc" id="L127">            }</span>
+        });
+
+<span class="nc" id="L130">        backButton.setText(&quot;Atgal&quot;);</span>
+<span class="nc" id="L131">        backButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L133">                backButtonActionPerformed(evt);</span>
+<span class="nc" id="L134">            }</span>
+        });
+
+
+<span class="nc" id="L138">        profileIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource(&quot;/profilePicture2.png&quot;))); // NOI18N</span>
+
+<span class="nc" id="L140">        emptyFieldError.setText(&quot;Nepalikite tusčių laukų&quot;);</span>
+
+<span class="nc" id="L142">        tlNumberError.setText(&quot;Netaisingas tl. nr. formatas&quot;);</span>
+
+<span class="nc" id="L144">        emailError.setText(&quot;Netaisingas el. pašto formatas&quot;);</span>
+
+<span class="nc" id="L146">        logOffButton.setText(&quot;Atsijungti&quot;);</span>
+<span class="nc" id="L147">        logOffButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L149">                logOffButtonActionPerformed(evt);</span>
+<span class="nc" id="L150">            }</span>
+        });
+
+<span class="nc" id="L153">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());</span>
+<span class="nc" id="L154">        getContentPane().setLayout(layout);</span>
+<span class="nc" id="L155">        layout.setHorizontalGroup(</span>
+<span class="nc" id="L156">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L157">            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L158">                .addGap(20, 20, 20)</span>
+<span class="nc" id="L159">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L160">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L161">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)</span>
+<span class="nc" id="L162">                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()</span>
+<span class="nc" id="L163">                                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L164">                                .addGap(43, 43, 43)</span>
+<span class="nc" id="L165">                                .addComponent(editButton)</span>
+<span class="nc" id="L166">                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="nc" id="L167">                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L168">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L169">                                .addComponent(profileIcon)</span>
+<span class="nc" id="L170">                                .addGap(18, 18, 18)</span>
+<span class="nc" id="L171">                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L172">                                    .addComponent(nameLabel)</span>
+<span class="nc" id="L173">                                    .addComponent(lastNameLabel))</span>
+<span class="nc" id="L174">                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L175">                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L176">                                    .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)</span>
+<span class="nc" id="L177">                                    .addComponent(lastNameField)))</span>
+<span class="nc" id="L178">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L179">                                .addGap(0, 0, Short.MAX_VALUE)</span>
+<span class="nc" id="L180">                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)</span>
+<span class="nc" id="L181">                                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L182">                                        .addComponent(addressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L183">                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L184">                                        .addComponent(addressField))</span>
+<span class="nc" id="L185">                                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L186">                                        .addComponent(tlNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L187">                                        .addGap(18, 18, 18)</span>
+<span class="nc" id="L188">                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L189">                                            .addComponent(tlNumberError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="nc" id="L190">                                            .addComponent(tlNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))</span>
+<span class="nc" id="L191">                                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L192">                                        .addComponent(emailLabel)</span>
+<span class="nc" id="L193">                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L194">                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L195">                                            .addComponent(emailError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="nc" id="L196">                                            .addComponent(emailField))))</span>
+<span class="nc" id="L197">                                .addGap(10, 10, 10)))</span>
+<span class="nc" id="L198">                        .addGap(42, 42, 42))</span>
+<span class="nc" id="L199">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L200">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L201">                            .addComponent(emptyFieldError, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L202">                            .addComponent(logOffButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L203">                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))</span>
+        );
+<span class="nc" id="L205">        layout.setVerticalGroup(</span>
+<span class="nc" id="L206">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L207">            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L208">                .addGap(16, 16, 16)</span>
+<span class="nc" id="L209">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)</span>
+<span class="nc" id="L210">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L211">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L212">                            .addComponent(nameLabel)</span>
+<span class="nc" id="L213">                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L214">                        .addGap(6, 6, 6)</span>
+<span class="nc" id="L215">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L216">                            .addComponent(lastNameLabel)</span>
+<span class="nc" id="L217">                            .addComponent(lastNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))</span>
+<span class="nc" id="L218">                    .addComponent(profileIcon))</span>
+<span class="nc" id="L219">                .addGap(33, 33, 33)</span>
+<span class="nc" id="L220">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L221">                    .addComponent(tlNumberLabel)</span>
+<span class="nc" id="L222">                    .addComponent(tlNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L223">                .addGap(2, 2, 2)</span>
+<span class="nc" id="L224">                .addComponent(tlNumberError)</span>
+<span class="nc" id="L225">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L226">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L227">                    .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L228">                    .addComponent(emailLabel))</span>
+<span class="nc" id="L229">                .addGap(3, 3, 3)</span>
+<span class="nc" id="L230">                .addComponent(emailError)</span>
+<span class="nc" id="L231">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L232">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L233">                    .addComponent(addressLabel)</span>
+<span class="nc" id="L234">                    .addComponent(addressField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L235">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)</span>
+<span class="nc" id="L236">                .addComponent(logOffButton)</span>
+<span class="nc" id="L237">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L238">                .addComponent(emptyFieldError)</span>
+<span class="nc" id="L239">                .addGap(18, 18, 18)</span>
+<span class="nc" id="L240">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L241">                    .addComponent(backButton)</span>
+<span class="nc" id="L242">                    .addComponent(editButton)</span>
+<span class="nc" id="L243">                    .addComponent(saveButton))</span>
+<span class="nc" id="L244">                .addGap(26, 26, 26))</span>
+        );
+
+<span class="nc" id="L247">        pack();</span>
+<span class="nc" id="L248">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+<span class="nc" id="L251">         saveButton.setVisible(true);</span>
+<span class="nc" id="L252">         nameField.enable(true);</span>
+<span class="nc" id="L253">         lastNameField.enable(true);</span>
+<span class="nc" id="L254">         tlNumberField.enable(true);</span>
+<span class="nc" id="L255">         emailField.enable(true);</span>
+<span class="nc" id="L256">         addressField.enable(true);</span>
+<span class="nc" id="L257">         editButton.setVisible(false);</span>
+<span class="nc" id="L258">         logOffButton.setVisible(false);</span>
+<span class="nc" id="L259">    }//GEN-LAST:event_editButtonActionPerformed</span>
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+<span class="nc bnc" id="L262" title="All 4 branches missed.">        if(isNotError() &amp;&amp; !areFieldsEmpty()) {</span>
+<span class="nc" id="L263">            backButton.setVisible(true);</span>
+<span class="nc" id="L264">            editButton.setVisible(true);</span>
+<span class="nc" id="L265">            logOffButton.setVisible(true);</span>
+<span class="nc" id="L266">            emptyFieldError.setVisible(false);</span>
+<span class="nc" id="L267">            saveButton.setVisible(false);</span>
+<span class="nc" id="L268">            nameField.enable(false);</span>
+<span class="nc" id="L269">            lastNameField.enable(false);</span>
+<span class="nc" id="L270">            tlNumberField.enable(false);</span>
+<span class="nc" id="L271">            emailField.enable(false);</span>
+<span class="nc" id="L272">            addressField.enable(false);</span>
+<span class="nc" id="L273">            editButton.enable(false);</span>
+            try{
+<span class="nc" id="L275">                UserServices.updateUserInfo(userInfo.get(&quot;ID&quot;), nameField.getText(), lastNameField.getText(), tlNumberField.getText(), emailField.getText(), addressField.getText());</span>
+<span class="nc" id="L276">            }catch(SQLException e) {</span>
+<span class="nc" id="L277">                throw new RuntimeException(e);</span>
+<span class="nc" id="L278">            }</span>
+        } else
+<span class="nc" id="L280">            emptyFieldError.setVisible(true);</span>
+
+<span class="nc" id="L282">    }//GEN-LAST:event_saveButtonActionPerformed</span>
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        if(saveButton.isVisible()) {</span>
+<span class="nc" id="L286">            backButton.setVisible(true);</span>
+<span class="nc" id="L287">            editButton.setVisible(true);</span>
+<span class="nc" id="L288">            logOffButton.setVisible(true);</span>
+<span class="nc" id="L289">            saveButton.setVisible(false);</span>
+        }
+        else {
+<span class="nc" id="L292">            new MainPage(userInfo).setVisible(true);</span>
+<span class="nc" id="L293">            this.setVisible(false);</span>
+        }
+<span class="nc" id="L295">    }//GEN-LAST:event_backButtonActionPerformed</span>
+
+    private void logOffButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+<span class="nc" id="L298">        new LoginPage().setVisible(true);</span>
+<span class="nc" id="L299">        this.setVisible(false);</span>
+<span class="nc" id="L300">    }//GEN-LAST:event_backButtonActionPerformed</span>
+
+    
+    private boolean isValidEmail(String email) {
+<span class="nc" id="L304">        String emailRegex = &quot;^[a-zA-Z0-9_+&amp;*-]+(?:\\.[a-zA-Z0-9_+&amp;*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$&quot;;</span>
+<span class="nc" id="L305">        Pattern pattern = Pattern.compile(emailRegex);</span>
+<span class="nc" id="L306">        Matcher matcher = pattern.matcher(email);</span>
+<span class="nc" id="L307">        return matcher.matches();</span>
+    }
+    
+    private boolean isValidTlNumber(String tlNumber) {
+<span class="nc" id="L311">        String phoneRegex = &quot;^(\\+\\d{1,3})?\\d{10}$&quot;;</span>
+<span class="nc" id="L312">        Pattern pattern = Pattern.compile(phoneRegex);</span>
+<span class="nc" id="L313">        Matcher matcher = pattern.matcher(tlNumber);</span>
+<span class="nc" id="L314">        return matcher.matches();</span>
+    }
+    
+    private boolean areFieldsEmpty() {
+<span class="nc bnc" id="L318" title="All 6 branches missed.">        return nameField.getText().isEmpty() || lastNameField.getText().isEmpty() || tlNumberField.getText().isEmpty() || </span>
+<span class="nc bnc" id="L319" title="All 4 branches missed.">               emailField.getText().isEmpty() || addressField.getText().isEmpty();</span>
+    }
+    
+    private boolean isNotError() {
+<span class="nc bnc" id="L323" title="All 2 branches missed.">        if(isValidTlNumber(tlNumberField.getText()))</span>
+<span class="nc" id="L324">            tlNumberError.setVisible(false);</span>
+        else
+<span class="nc" id="L326">            tlNumberError.setVisible(true);</span>
+        
+<span class="nc bnc" id="L328" title="All 2 branches missed.">        if(isValidEmail(emailField.getText()))</span>
+<span class="nc" id="L329">            emailError.setVisible(false);</span>
+        else 
+<span class="nc" id="L331">            emailError.setVisible(true);</span>
+        
+<span class="nc bnc" id="L333" title="All 4 branches missed.">        return isValidTlNumber(tlNumberField.getText()) &amp;&amp; isValidEmail(emailField.getText());</span>
+    }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L345" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L347">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L348">                    break;</span>
+                }
+            }
+<span class="nc" id="L351">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L352">            java.util.logging.Logger.getLogger(ProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L353">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L354">            java.util.logging.Logger.getLogger(ProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L355">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L356">            java.util.logging.Logger.getLogger(ProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L357">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L358">            java.util.logging.Logger.getLogger(ProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L359">        }</span>
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the form */
+<span class="nc" id="L363">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L365">                new ProfilePage().setVisible(true);</span>
+<span class="nc" id="L366">            }</span>
+        });
+<span class="nc" id="L368">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField addressField;
+    private javax.swing.JLabel addressLabel;
+    private javax.swing.JButton backButton;
+    private javax.swing.JButton editButton;
+    private javax.swing.JLabel emailError;
+    private javax.swing.JTextField emailField;
+    private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel emptyFieldError;
+    private javax.swing.JTextField lastNameField;
+    private javax.swing.JLabel lastNameLabel;
+    private javax.swing.JButton logOffButton;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel profileIcon;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JLabel tlNumberError;
+    private javax.swing.JTextField tlNumberField;
+    private javax.swing.JLabel tlNumberLabel;
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

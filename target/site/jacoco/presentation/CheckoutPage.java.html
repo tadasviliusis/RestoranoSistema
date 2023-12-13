@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CheckoutPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">presentation</a> &gt; <span class="el_source">CheckoutPage.java</span></div><h1>CheckoutPage.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package presentation;
+
+import java.awt.Color;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import model.modules.FoodOrder;
+import model.services.FoodOrderServices;
+import model.services.OtherOrderServices;
+
+/**
+ *
+ * @author viliu
+ */
+public class CheckoutPage extends javax.swing.JFrame {
+<span class="nc" id="L29">         List&lt;FoodOrder&gt; orders = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L30">         Map&lt;String, Object&gt; userInfo = new HashMap();</span>
+         int restaurantID;
+         String restaurantName;
+<span class="nc" id="L33">         double totalCost = 0;</span>
+<span class="nc" id="L34">         boolean isDelivery = false;</span>
+         String address;
+         String number;
+         
+    /**
+     * Creates new form CheckoutPage
+     */
+<span class="nc" id="L41">    public CheckoutPage() {</span>
+<span class="nc" id="L42">        initComponents();</span>
+<span class="nc" id="L43">        Color col = new Color(204,204,204);</span>
+<span class="nc" id="L44">        getContentPane().setBackground(col);</span>
+        
+<span class="nc" id="L46">    }</span>
+    
+<span class="nc" id="L48">     public CheckoutPage(Map&lt;String, Object&gt; userInfo, int restaurantID, List&lt;FoodOrder&gt; orders, String restaurantName) {</span>
+<span class="nc" id="L49">        initComponents();</span>
+<span class="nc" id="L50">        this.orders = orders;</span>
+<span class="nc" id="L51">        this.userInfo = userInfo;</span>
+<span class="nc" id="L52">        this.restaurantID = restaurantID;</span>
+<span class="nc" id="L53">        this.restaurantName = restaurantName;</span>
+<span class="nc" id="L54">        fillTable();</span>
+<span class="nc" id="L55">        sumNumberLabel.setText(Double.toString(totalCost));</span>
+<span class="nc" id="L56">        restaurantNameLabel.setText(restaurantName);</span>
+<span class="nc" id="L57">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L58">        this.setTitle(&quot;Checkout Page&quot;);</span>
+<span class="nc" id="L59">    }</span>
+     
+     
+     
+<span class="nc" id="L63">     public CheckoutPage(Map&lt;String, Object&gt; userInfo, int restaurantID, List&lt;FoodOrder&gt; orders, String restaurantName, String address, String number) {</span>
+<span class="nc" id="L64">        initComponents();</span>
+<span class="nc" id="L65">        this.orders = orders;</span>
+<span class="nc" id="L66">        this.userInfo = userInfo;</span>
+<span class="nc" id="L67">        this.restaurantID = restaurantID;</span>
+<span class="nc" id="L68">        this.restaurantName = restaurantName;</span>
+<span class="nc" id="L69">        this.isDelivery = true;</span>
+<span class="nc" id="L70">        this.address = address;</span>
+<span class="nc" id="L71">        this.number = number;</span>
+<span class="nc" id="L72">        fillTable();</span>
+<span class="nc" id="L73">        sumNumberLabel.setText(Double.toString(totalCost));</span>
+<span class="nc" id="L74">        restaurantNameLabel.setText(restaurantName);</span>
+<span class="nc" id="L75">        this.setTitle(&quot;Checkout Page&quot;);</span>
+        
+<span class="nc" id="L77">    }</span>
+     
+     
+     
+     public void fillTable(){
+         
+<span class="nc" id="L83">         String columns[] = {&quot;Pavadinimas&quot;, &quot;Kiekis&quot;, &quot;Kaina&quot;};</span>
+         
+         
+        String data[][];
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if(isDelivery)</span>
+<span class="nc" id="L88">            data = new String[orders.size() + 1][3];</span>
+        else
+<span class="nc" id="L90">            data = new String[orders.size()][3];</span>
+         
+       
+<span class="nc bnc" id="L93" title="All 2 branches missed.">         for(int i=0; i&lt;orders.size(); i++) {</span>
+<span class="nc" id="L94">             data[i][0] = orders.get(i).foodname();</span>
+<span class="nc" id="L95">             data[i][1] = Integer.toString(orders.get(i).amount());</span>
+<span class="nc" id="L96">             data[i][2] = Double.toString(orders.get(i).cost());</span>
+             
+<span class="nc" id="L98">             totalCost = totalCost + orders.get(i).cost();</span>
+         }
+         
+<span class="nc bnc" id="L101" title="All 2 branches missed.">         if(isDelivery)</span>
+         {
+<span class="nc" id="L103">             data[orders.size()][0] = &quot;Maisto pristatymas į namus&quot;;</span>
+<span class="nc" id="L104">             data[orders.size()][1] = &quot; &quot;;</span>
+<span class="nc" id="L105">             data[orders.size()][2] = Double.toString(2);</span>
+<span class="nc" id="L106">             totalCost += 2;</span>
+         }
+         
+<span class="nc" id="L109">         DefaultTableModel model = new DefaultTableModel(data, columns);</span>
+<span class="nc" id="L110">         jTable1.setModel(model);</span>
+<span class="nc" id="L111">     }</span>
+     
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L123">        jScrollPane1 = new javax.swing.JScrollPane();</span>
+<span class="nc" id="L124">        jTable1 = new javax.swing.JTable();</span>
+<span class="nc" id="L125">        sumLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L126">        backButton = new javax.swing.JButton();</span>
+<span class="nc" id="L127">        cancelButton = new javax.swing.JButton();</span>
+<span class="nc" id="L128">        Buy = new javax.swing.JButton();</span>
+<span class="nc" id="L129">        titleLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L130">        sumNumberLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L131">        restourantLabel = new javax.swing.JLabel();</span>
+<span class="nc" id="L132">        restaurantNameLabel = new javax.swing.JLabel();</span>
+
+<span class="nc" id="L134">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+
+<span class="nc" id="L136">        jTable1.setModel(new javax.swing.table.DefaultTableModel(</span>
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                &quot;Maistas&quot;, &quot;Kiekis&quot;, &quot;Kainas&quot;
+            }
+<span class="nc" id="L146">        ) {</span>
+<span class="nc" id="L147">            Class[] types = new Class [] {</span>
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
+            };
+<span class="nc" id="L150">            boolean[] canEdit = new boolean [] {</span>
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+<span class="nc" id="L155">                return types [columnIndex];</span>
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+<span class="nc" id="L159">                return canEdit [columnIndex];</span>
+            }
+        });
+<span class="nc" id="L162">        jScrollPane1.setViewportView(jTable1);</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (jTable1.getColumnModel().getColumnCount() &gt; 0) {</span>
+<span class="nc" id="L164">            jTable1.getColumnModel().getColumn(0).setResizable(false);</span>
+<span class="nc" id="L165">            jTable1.getColumnModel().getColumn(0).setPreferredWidth(220);</span>
+<span class="nc" id="L166">            jTable1.getColumnModel().getColumn(1).setResizable(false);</span>
+<span class="nc" id="L167">            jTable1.getColumnModel().getColumn(1).setPreferredWidth(20);</span>
+<span class="nc" id="L168">            jTable1.getColumnModel().getColumn(2).setResizable(false);</span>
+<span class="nc" id="L169">            jTable1.getColumnModel().getColumn(2).setPreferredWidth(40);</span>
+        }
+
+<span class="nc" id="L172">        sumLabel.setText(&quot;Suma:&quot;);</span>
+
+<span class="nc" id="L174">        backButton.setText(&quot;Atgal&quot;);</span>
+<span class="nc" id="L175">        backButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L177">                backButtonActionPerformed(evt);</span>
+<span class="nc" id="L178">            }</span>
+        });
+
+<span class="nc" id="L181">        cancelButton.setText(&quot;Atšaukti&quot;);</span>
+<span class="nc" id="L182">        cancelButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L184">                cancelButtonActionPerformed(evt);</span>
+<span class="nc" id="L185">            }</span>
+        });
+
+<span class="nc" id="L188">        Buy.setText(&quot;Pirkti&quot;);</span>
+<span class="nc" id="L189">        Buy.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L191">                BuyActionPerformed(evt);</span>
+<span class="nc" id="L192">            }</span>
+        });
+
+<span class="nc" id="L195">        titleLabel.setFont(new java.awt.Font(&quot;Segoe UI&quot;, 1, 14)); // NOI18N</span>
+<span class="nc" id="L196">        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);</span>
+<span class="nc" id="L197">        titleLabel.setText(&quot;Užsakymas&quot;);</span>
+
+<span class="nc" id="L199">        restourantLabel.setText(&quot;Restoranas:&quot;);</span>
+
+<span class="nc" id="L201">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());</span>
+<span class="nc" id="L202">        getContentPane().setLayout(layout);</span>
+<span class="nc" id="L203">        layout.setHorizontalGroup(</span>
+<span class="nc" id="L204">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L205">            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L206">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L207">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L208">                        .addGap(21, 21, 21)</span>
+<span class="nc" id="L209">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L210">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L211">                                .addComponent(restourantLabel)</span>
+<span class="nc" id="L212">                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L213">                                .addComponent(restaurantNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L214">                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)</span>
+<span class="nc" id="L215">                                .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L216">                                    .addComponent(backButton)</span>
+<span class="nc" id="L217">                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="nc" id="L218">                                    .addComponent(sumLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L219">                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L220">                                    .addComponent(sumNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L221">                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="nc" id="L222">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L223">                                .addComponent(cancelButton)</span>
+<span class="nc" id="L224">                                .addGap(210, 210, 210)</span>
+<span class="nc" id="L225">                                .addComponent(Buy))))</span>
+<span class="nc" id="L226">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L227">                        .addGap(103, 103, 103)</span>
+<span class="nc" id="L228">                        .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))</span>
+<span class="nc" id="L229">                .addContainerGap(27, Short.MAX_VALUE))</span>
+        );
+<span class="nc" id="L231">        layout.setVerticalGroup(</span>
+<span class="nc" id="L232">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L233">            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L234">                .addComponent(titleLabel)</span>
+<span class="nc" id="L235">                .addGap(2, 2, 2)</span>
+<span class="nc" id="L236">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L237">                    .addComponent(restourantLabel)</span>
+<span class="nc" id="L238">                    .addComponent(restaurantNameLabel))</span>
+<span class="nc" id="L239">                .addGap(7, 7, 7)</span>
+<span class="nc" id="L240">                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L241">                .addGap(18, 18, 18)</span>
+<span class="nc" id="L242">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L243">                    .addComponent(sumLabel)</span>
+<span class="nc" id="L244">                    .addComponent(backButton)</span>
+<span class="nc" id="L245">                    .addComponent(sumNumberLabel))</span>
+<span class="nc" id="L246">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="nc" id="L247">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="nc" id="L248">                    .addComponent(cancelButton)</span>
+<span class="nc" id="L249">                    .addComponent(Buy))</span>
+<span class="nc" id="L250">                .addContainerGap(54, Short.MAX_VALUE))</span>
+        );
+
+<span class="nc" id="L253">        pack();</span>
+<span class="nc" id="L254">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+<span class="nc" id="L257">        new MenuPage(userInfo, restaurantID, restaurantName).setVisible(true);</span>
+<span class="nc" id="L258">        this.setVisible(false);</span>
+<span class="nc" id="L259">    }//GEN-LAST:event_backButtonActionPerformed</span>
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+<span class="nc" id="L262">        new OrderPage(userInfo).setVisible(true);</span>
+<span class="nc" id="L263">        this.setVisible(false);</span>
+<span class="nc" id="L264">    }//GEN-LAST:event_cancelButtonActionPerformed</span>
+
+    private void BuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuyActionPerformed
+        
+
+    try {
+<span class="nc bnc" id="L270" title="All 2 branches missed.">        if(isDelivery)</span>
+        {
+<span class="nc" id="L272">            int newID = OtherOrderServices.newDeliveryToHome(address, 2, LocalTime.now(), LocalDate.now(), number);</span>
+<span class="nc" id="L273">            FoodOrderServices.newOrder_Food(orders, LocalDate.now(), LocalTime.now(), &quot;Vykdoma&quot;, newID, 0, false, (int)userInfo.get(&quot;ID&quot;), true);</span>
+<span class="nc" id="L274">        }</span>
+        else
+<span class="nc" id="L276">            FoodOrderServices.newOrder_Food(orders, LocalDate.now(), LocalTime.now(), &quot;Vykdoma&quot;, 0, 0, false, (int)userInfo.get(&quot;ID&quot;), false);</span>
+<span class="nc" id="L277">        JOptionPane.showMessageDialog(null, &quot;Užsakymas įvykdytas!&quot;);</span>
+        
+<span class="nc" id="L279">    } catch (SQLException ex) {</span>
+<span class="nc" id="L280">        JOptionPane.showMessageDialog(null, &quot;Užsakymas neįvykdytas!&quot;);</span>
+<span class="nc" id="L281">        Logger.getLogger(CheckoutPage.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L282">    }</span>
+    
+<span class="nc" id="L284">    new MainPage(userInfo).setVisible(true);</span>
+<span class="nc" id="L285">    this.setVisible(false);</span>
+    
+<span class="nc" id="L287">    }//GEN-LAST:event_BuyActionPerformed</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L299" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L301">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L302">                    break;</span>
+                }
+            }
+<span class="nc" id="L305">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L306">            java.util.logging.Logger.getLogger(CheckoutPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L307">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L308">            java.util.logging.Logger.getLogger(CheckoutPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L309">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L310">            java.util.logging.Logger.getLogger(CheckoutPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L311">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L312">            java.util.logging.Logger.getLogger(CheckoutPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L313">        }</span>
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the form */
+<span class="nc" id="L317">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L319">                new CheckoutPage().setVisible(true);</span>
+<span class="nc" id="L320">            }</span>
+        });
+<span class="nc" id="L322">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Buy;
+    private javax.swing.JButton backButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel restaurantNameLabel;
+    private javax.swing.JLabel restourantLabel;
+    private javax.swing.JLabel sumLabel;
+    private javax.swing.JLabel sumNumberLabel;
+    private javax.swing.JLabel titleLabel;
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

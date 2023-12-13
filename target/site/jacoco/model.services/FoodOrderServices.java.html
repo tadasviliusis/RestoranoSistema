@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodOrderServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">model.services</a> &gt; <span class="el_source">FoodOrderServices.java</span></div><h1>FoodOrderServices.java</h1><pre class="source lang-java linenums">package model.services;
+
+import data.DatabaseOperations;
+import model.modules.ClientOrder;
+import model.modules.FoodOrder;
+import model.modules.Menu;
+import model.modules.Restaurant;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L20">public class FoodOrderServices {</span>
+    public static List&lt;Restaurant&gt; getRestaurantList() throws SQLException {
+<span class="nc" id="L22">        ResultSet resultSet = DatabaseOperations.getRestaurantList();</span>
+
+<span class="nc" id="L24">        List&lt;Restaurant&gt; restaurants = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        while (resultSet.next()){</span>
+<span class="nc" id="L26">            restaurants.add(new Restaurant(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3)));</span>
+        }
+<span class="nc" id="L28">        return restaurants;</span>
+    }
+
+    public static List&lt;Menu&gt; getRestaurantMenu(int restaurantID) throws SQLException {
+<span class="nc" id="L32">        List&lt;Menu&gt; menu = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L33">        ResultSet resultSet = DatabaseOperations.getRestaurantMenu(restaurantID);</span>
+
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        while (resultSet.next())</span>
+        {
+<span class="nc" id="L37">            menu.add(</span>
+<span class="nc" id="L38">                    new Menu(resultSet.getInt(1), resultSet.getString(2),</span>
+<span class="nc" id="L39">                            resultSet.getDouble(3), resultSet.getString(4),</span>
+<span class="nc" id="L40">                            resultSet.getString(5))</span>
+            );
+        }
+<span class="nc" id="L43">        return menu;</span>
+    }
+
+
+    public static void newFoodOrder(List&lt;FoodOrder&gt; totalOrder, int orderID) throws SQLException {
+<span class="nc" id="L48">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for(FoodOrder order : totalOrder)</span>
+        {
+<span class="nc" id="L52">            values.put(&quot;Kiekis&quot;, order.amount());</span>
+<span class="nc" id="L53">            values.put(&quot;Kaina&quot;, order.cost());</span>
+<span class="nc" id="L54">            values.put(&quot;PatiekaloID&quot;, order.foodID());</span>
+<span class="nc" id="L55">            values.put(&quot;KlientoUzsakymoID&quot;, orderID);</span>
+<span class="nc" id="L56">            DatabaseOperations.newFoodOrder(values);</span>
+<span class="nc" id="L57">            values.clear();</span>
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">    }</span>
+
+    public static String newOrder_Food(List&lt;FoodOrder&gt; totalOrder, LocalDate date, LocalTime time, String state, int deliveryID,
+                                       int couponID, boolean useCoupon, int clientID, boolean isDelivery) throws SQLException {
+<span class="nc" id="L63">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L64">        values.put(&quot;Data&quot;, date);</span>
+<span class="nc" id="L65">        values.put(&quot;Laikas&quot;, time);</span>
+<span class="nc" id="L66">        values.put(&quot;Busena&quot;, state);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(isDelivery)</span>
+<span class="nc" id="L68">            values.put(&quot;PristatymoID&quot;, deliveryID);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if(useCoupon)</span>
+<span class="nc" id="L70">            values.put(&quot;KlientoKuponoID&quot;, couponID);</span>
+<span class="nc" id="L71">        values.put(&quot;KlientoID&quot;, clientID);</span>
+<span class="nc" id="L72">        String newID = DatabaseOperations.newOrder_Food(values);</span>
+<span class="nc" id="L73">        newFoodOrder(totalOrder, Integer.parseInt(newID));</span>
+<span class="nc" id="L74">        return newID;</span>
+
+    }
+
+
+
+    public static List&lt;ClientOrder&gt; getOrders(int id) throws SQLException {
+<span class="nc" id="L81">        List&lt;ClientOrder&gt; orders = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L82">        ResultSet resultSet = DatabaseOperations.getOrders(Integer.toString(id));</span>
+
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        while (resultSet.next())</span>
+        {
+<span class="nc" id="L86">            LocalDate localdate = Instant.ofEpochMilli(resultSet.getDate(2).getTime())</span>
+<span class="nc" id="L87">                    .atZone(ZoneId.systemDefault())</span>
+<span class="nc" id="L88">                    .toLocalDate();</span>
+<span class="nc" id="L89">            orders.add(</span>
+<span class="nc" id="L90">                    new ClientOrder(resultSet.getInt(1), localdate,</span>
+<span class="nc" id="L91">                            resultSet.getTime(3).toLocalTime(), resultSet.getString(4),</span>
+<span class="nc" id="L92">                            resultSet.getInt(5), resultSet.getInt(6), resultSet.getInt(7),</span>
+<span class="nc" id="L93">                            resultSet.getInt(8), resultSet.getInt(9)</span>
+                    )
+            );
+<span class="nc" id="L96">        }</span>
+<span class="nc" id="L97">        return orders;</span>
+    }
+
+    public static void cancelOrder(int ID) throws SQLException {
+<span class="nc" id="L101">        Map&lt;String, Object&gt; newValues = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L102">        newValues.put(&quot;Busena&quot;, &quot;Atsauktas&quot;);</span>
+
+<span class="nc" id="L104">        Map&lt;String, Object&gt; whereValues = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L105">        whereValues.put(&quot;UzsakymoID&quot;,ID);</span>
+<span class="nc" id="L106">        DatabaseOperations.cancelOrder(newValues, whereValues);</span>
+<span class="nc" id="L107">    }</span>
+
+
+
+
+
+
+    public static List&lt;FoodOrder&gt; getFoodOrder(int orderID) throws SQLException {
+<span class="nc" id="L115">        List&lt;FoodOrder&gt; orders = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L116">        ResultSet resultSet = DatabaseOperations.getFoodOrder(orderID);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        while (resultSet.next())</span>
+        {
+<span class="nc" id="L119">            orders.add(</span>
+<span class="nc" id="L120">                    new FoodOrder(resultSet.getInt(1),resultSet.getString(&quot;meniu.Pavadinimas&quot;), resultSet.getInt(2), resultSet.getDouble(3))</span>
+            );
+        }
+<span class="nc" id="L123">        return orders;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

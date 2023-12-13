@@ -1,0 +1,64 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+MYSQLTEST,presentation,DeliveryPage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,DeliveryPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage,1258,0,50,0,287,0,42,0,17,0
+MYSQLTEST,presentation,DeliveryPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,LoginPage,551,0,6,0,138,0,10,0,7,0
+MYSQLTEST,presentation,RestaurantsPage.new Runnable() {...},4,0,0,0,2,0,2,0,2,0
+MYSQLTEST,presentation,DeliveryPage,456,0,4,0,111,0,8,0,6,0
+MYSQLTEST,presentation,LoginPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,LoginPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,LoginPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,LoginPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,MainPage,945,0,4,0,236,0,9,0,7,0
+MYSQLTEST,presentation,RegistrationPage.new Runnable() {...},18,0,0,0,6,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,LoginPage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,ProfilePage,1035,0,28,0,241,0,27,0,13,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,CheckoutPage.new DefaultTableModel() {...},50,0,0,0,5,0,3,0,3,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,RegistrationPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,CheckoutPage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,CheckoutPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,CheckoutPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,CheckoutPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,MenuPage.new Runnable() {...},4,0,0,0,2,0,2,0,2,0
+MYSQLTEST,presentation,MenuPage,755,0,26,0,159,0,29,0,16,0
+MYSQLTEST,presentation,RestaurantsPage,349,0,6,0,89,0,12,0,9,0
+MYSQLTEST,presentation,OrderPage,440,0,4,0,108,0,10,0,8,0
+MYSQLTEST,presentation,ProfilePage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,ProfilePage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,ProfilePage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,ProfilePage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,ProfilePage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,OrderPage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,OrderPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,OrderPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,OrderPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,OrderPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,OrderHistoryPage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,CheckoutPage,873,0,14,0,168,0,16,0,9,0
+MYSQLTEST,presentation,OrderHistoryPage,534,0,16,0,133,0,19,0,11,0
+MYSQLTEST,presentation,MainPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,MainPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,MainPage.new ActionListener() {...},11,0,0,0,3,0,2,0,2,0
+MYSQLTEST,presentation,MainPage.new Runnable() {...},9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,default,Main,9,0,0,0,3,0,2,0,2,0
+MYSQLTEST,data,DatabaseOperations,145,0,0,0,51,0,27,0,27,0
+MYSQLTEST,data,MySQL,232,0,14,0,58,0,13,0,6,0
+MYSQLTEST,model.services,OtherOrderServices,308,0,10,0,72,0,16,0,11,0
+MYSQLTEST,model.services,FoodOrderServices,270,0,14,0,61,0,15,0,8,0
+MYSQLTEST,model.services,UserServices,271,0,8,0,64,0,13,0,9,0
+MYSQLTEST,model.modules,Restaurant,33,0,0,0,14,0,7,0,7,0
+MYSQLTEST,model.modules,ClientOrder,93,0,0,0,38,0,19,0,19,0
+MYSQLTEST,model.modules,Coupon,53,0,0,0,22,0,11,0,11,0
+MYSQLTEST,model.modules,Menu,53,0,0,0,22,0,11,0,11,0
+MYSQLTEST,model.modules,Services,43,0,0,0,18,0,9,0,9,0
+MYSQLTEST,model.modules,FoodOrder,43,0,0,0,18,0,9,0,9,0

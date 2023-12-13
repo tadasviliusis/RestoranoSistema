@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderHistoryPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">presentation</a> &gt; <span class="el_source">OrderHistoryPage.java</span></div><h1>OrderHistoryPage.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package presentation;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
+import model.modules.ClientOrder;
+import model.modules.FoodOrder;
+import model.services.FoodOrderServices;
+
+/**
+ *
+ * @author viliu
+ */
+public class OrderHistoryPage extends javax.swing.JFrame {
+<span class="nc" id="L37">    Map&lt;String, Object&gt; userInfo = new HashMap();</span>
+<span class="nc" id="L38">    List&lt;ClientOrder&gt; orders = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L39">    List&lt;FoodOrder&gt; ordersFood = new ArrayList&lt;&gt;();</span>
+    /**
+     * Creates new form OrderHistoryPage
+     */
+<span class="nc" id="L43">    public OrderHistoryPage() {</span>
+<span class="nc" id="L44">        initComponents();</span>
+<span class="nc" id="L45">        Color col = new Color(204,204,204);</span>
+<span class="nc" id="L46">        getContentPane().setBackground(col);</span>
+        
+<span class="nc" id="L48">    }</span>
+    
+<span class="nc" id="L50">    public OrderHistoryPage(Map&lt;String, Object&gt; userInfo) throws SQLException {</span>
+        //initComponents();
+<span class="nc" id="L52">        this.userInfo = userInfo;</span>
+<span class="nc" id="L53">        fillOrders();</span>
+<span class="nc" id="L54">        generateOrdersList();</span>
+<span class="nc" id="L55">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L56">        this.setTitle(&quot;Order History Page&quot;);</span>
+<span class="nc" id="L57">    }</span>
+
+    
+    private void fillOrders() throws SQLException{
+<span class="nc" id="L61">        this.orders = FoodOrderServices.getOrders((int)userInfo.get(&quot;ID&quot;));</span>
+<span class="nc" id="L62">    }</span>
+    
+    
+    
+    
+    private void openOrder(ClientOrder order){
+        try {
+<span class="nc" id="L69">            double totalCost = 0;</span>
+<span class="nc" id="L70">            ordersFood = FoodOrderServices.getFoodOrder((int)order.ID());</span>
+            
+<span class="nc" id="L72">            String fullOrder = &quot;Uzsakymas:\n&quot;</span>
+<span class="nc" id="L73">                    + &quot;Laikas: &quot; + order.time().toString() + &quot;\n&quot;</span>
+<span class="nc" id="L74">                    + &quot;Data: &quot; + order.date().toString() + &quot;\n&quot;</span>
+<span class="nc" id="L75">                    + &quot;Būsena: &quot; + order.state().toString() + &quot;\n&quot;;</span>
+<span class="nc" id="L76">                    fullOrder += &quot; \n&quot;;</span>
+            
+<span class="nc" id="L78">            fullOrder += &quot;Patiekalai: \n&quot;;</span>
+            
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            for(FoodOrder food : ordersFood){</span>
+<span class="nc" id="L81">                fullOrder += food.foodname() + &quot;\n&quot;;</span>
+<span class="nc" id="L82">                fullOrder += &quot;Kiekis: &quot; + food.amount() + &quot;\n&quot;;</span>
+<span class="nc" id="L83">                fullOrder += &quot;Kaina: &quot; + food.cost() + &quot;\n&quot;;</span>
+<span class="nc" id="L84">                totalCost += food.cost();</span>
+<span class="nc" id="L85">                fullOrder += &quot; \n&quot;;</span>
+<span class="nc" id="L86">            }</span>
+            
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if(order.deliveryID() != 0)</span>
+            {
+<span class="nc" id="L90">                fullOrder += &quot;Pristatymas į namus. \n&quot;;</span>
+<span class="nc" id="L91">                fullOrder += &quot;Kaina: &quot; + 2 + &quot;\n&quot;;</span>
+<span class="nc" id="L92">                fullOrder += &quot; \n&quot;;</span>
+<span class="nc" id="L93">                totalCost += 2;</span>
+            }
+            
+            
+<span class="nc" id="L97">            fullOrder += &quot;Suma: &quot; + totalCost + &quot;\n&quot;;</span>
+            
+            
+            
+            
+            
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            if(order.state().equals(&quot;Vykdoma&quot;))</span>
+            {
+                
+<span class="nc" id="L106">                Object[] options = { &quot;Atšaukti&quot;, &quot;OK&quot; };</span>
+<span class="nc" id="L107">                int choice = JOptionPane.showOptionDialog(</span>
+                null,
+                fullOrder,
+                &quot;Užsakymas&quot;,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                if (choice == 0) {</span>
+<span class="nc" id="L119">                    FoodOrderServices.cancelOrder((int)order.ID());</span>
+<span class="nc" id="L120">                    order.setState(&quot;Atsauktas&quot;);</span>
+<span class="nc" id="L121">                    JOptionPane.showMessageDialog(null, &quot;Užsakymas atšauktas.&quot;);</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                } else if (choice == 1) {</span>
+
+                }  
+<span class="nc" id="L126">            }</span>
+            else
+<span class="nc" id="L128">                JOptionPane.showMessageDialog(null, fullOrder);</span>
+<span class="nc" id="L129">        } catch (SQLException ex) {</span>
+<span class="nc" id="L130">            JOptionPane.showMessageDialog(null, &quot;NOT SUCCESS&quot;);</span>
+<span class="nc" id="L131">        }</span>
+<span class="nc" id="L132">    }</span>
+    
+    
+    
+        private void generateOrdersList() throws SQLException{
+     
+<span class="nc" id="L138">        setLayout(new BorderLayout()); // Set layout for the JFrame</span>
+
+        // Create a JPanel with a vertical BoxLayout to contain each item and its button
+<span class="nc" id="L141">        JPanel itemsPanel = new JPanel();</span>
+<span class="nc" id="L142">        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.Y_AXIS));</span>
+
+        // Scroll Pane in case of many items
+<span class="nc" id="L145">        JScrollPane scrollPane = new JScrollPane(itemsPanel);</span>
+<span class="nc" id="L146">        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
+
+        // Panel to hold the scroll pane
+<span class="nc" id="L149">        JPanel containerPanel = new JPanel(new BorderLayout());</span>
+<span class="nc" id="L150">        containerPanel.add(scrollPane, BorderLayout.CENTER);</span>
+<span class="nc" id="L151">        containerPanel.setPreferredSize(new Dimension(375, 300)); // Set preferred size</span>
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        for (ClientOrder order : orders) {</span>
+<span class="nc" id="L154">            addItem(order, itemsPanel);</span>
+<span class="nc" id="L155">        }</span>
+
+        // Additional components
+<span class="nc" id="L158">        JLabel header = new JLabel(&quot;Uzsakymu istorija.&quot;, SwingConstants.CENTER);</span>
+<span class="nc" id="L159">        JButton returnButton = new JButton(&quot;Atgal&quot;);</span>
+<span class="nc" id="L160">        returnButton.addActionListener(e -&gt; {</span>
+            try {
+<span class="nc" id="L162">                returnPress();</span>
+<span class="nc" id="L163">            } catch (SQLException ex) {</span>
+<span class="nc" id="L164">                Logger.getLogger(RestaurantsPage.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L165">            }</span>
+<span class="nc" id="L166">        });</span>
+        
+        
+        
+        
+        //--------
+<span class="nc" id="L172">        JPanel bottomPanel = new JPanel(new BorderLayout());</span>
+
+<span class="nc" id="L174">        bottomPanel.add(returnButton, BorderLayout.WEST);</span>
+        
+<span class="nc" id="L176">        add(header, BorderLayout.NORTH);</span>
+<span class="nc" id="L177">        add(containerPanel, BorderLayout.CENTER);</span>
+<span class="nc" id="L178">        add(bottomPanel, BorderLayout.SOUTH);</span>
+
+<span class="nc" id="L180">        pack();</span>
+<span class="nc" id="L181">        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L182">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L183">        setVisible(true);</span>
+        
+        
+<span class="nc" id="L186">    }</span>
+    
+    
+    private void addItem(ClientOrder order, JPanel itemsPanel) {
+<span class="nc" id="L190">    JPanel itemPanel = new JPanel(new BorderLayout());</span>
+
+<span class="nc" id="L192">    JLabel itemLabel = new JLabel(&quot;Uzsakymas #&quot; + order.ID());</span>
+<span class="nc" id="L193">    itemLabel.setVerticalAlignment(SwingConstants.TOP);</span>
+<span class="nc" id="L194">    itemPanel.add(itemLabel, BorderLayout.WEST);</span>
+
+    // Create a new panel for the buttons
+<span class="nc" id="L197">    JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));</span>
+<span class="nc" id="L198">    JButton orderButton = new JButton(&quot;Perziureti&quot;);</span>
+    
+    
+    
+<span class="nc" id="L202">    orderButton.addActionListener(e -&gt; {</span>
+<span class="nc" id="L203">        openOrder(order);</span>
+<span class="nc" id="L204">    });</span>
+
+<span class="nc" id="L206">    buttonsPanel.add(orderButton);</span>
+
+    // Add the buttons panel to the right of the item panel
+<span class="nc" id="L209">    itemPanel.add(buttonsPanel, BorderLayout.EAST);</span>
+
+<span class="nc" id="L211">    itemsPanel.add(itemPanel);</span>
+        
+        
+        
+<span class="nc" id="L215">    }</span>
+    
+    
+    private void returnPress() throws SQLException{
+<span class="nc" id="L219">        new MainPage(userInfo).setVisible(true);</span>
+<span class="nc" id="L220">        this.setVisible(false);</span>
+<span class="nc" id="L221">    }</span>
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L232">        jLabel1 = new javax.swing.JLabel();</span>
+
+<span class="nc" id="L234">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+
+<span class="nc" id="L236">        jLabel1.setFont(new java.awt.Font(&quot;Segoe UI&quot;, 1, 14)); // NOI18N</span>
+<span class="nc" id="L237">        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);</span>
+<span class="nc" id="L238">        jLabel1.setText(&quot;Užsakymai&quot;);</span>
+
+<span class="nc" id="L240">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());</span>
+<span class="nc" id="L241">        getContentPane().setLayout(layout);</span>
+<span class="nc" id="L242">        layout.setHorizontalGroup(</span>
+<span class="nc" id="L243">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L244">            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L245">                .addGap(132, 132, 132)</span>
+<span class="nc" id="L246">                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="nc" id="L247">                .addContainerGap(138, Short.MAX_VALUE))</span>
+        );
+<span class="nc" id="L249">        layout.setVerticalGroup(</span>
+<span class="nc" id="L250">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L251">            .addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L252">                .addGap(16, 16, 16)</span>
+<span class="nc" id="L253">                .addComponent(jLabel1)</span>
+<span class="nc" id="L254">                .addContainerGap(264, Short.MAX_VALUE))</span>
+        );
+
+<span class="nc" id="L257">        pack();</span>
+<span class="nc" id="L258">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L270" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L272">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L273">                    break;</span>
+                }
+            }
+<span class="nc" id="L276">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L277">            java.util.logging.Logger.getLogger(OrderHistoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L278">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L279">            java.util.logging.Logger.getLogger(OrderHistoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L280">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L281">            java.util.logging.Logger.getLogger(OrderHistoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L282">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L283">            java.util.logging.Logger.getLogger(OrderHistoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L284">        }</span>
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the form */
+<span class="nc" id="L288">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L290">                new OrderHistoryPage().setVisible(true);</span>
+<span class="nc" id="L291">            }</span>
+        });
+<span class="nc" id="L293">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

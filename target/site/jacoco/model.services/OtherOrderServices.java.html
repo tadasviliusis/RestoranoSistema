@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OtherOrderServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">model.services</a> &gt; <span class="el_source">OtherOrderServices.java</span></div><h1>OtherOrderServices.java</h1><pre class="source lang-java linenums">package model.services;
+
+import data.DatabaseOperations;
+import model.modules.Coupon;
+import model.modules.FoodOrder;
+import model.modules.Services;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L17">public class OtherOrderServices {</span>
+
+    public static List&lt;Coupon&gt; getCoupons(int ID) throws SQLException {
+<span class="nc" id="L20">        List&lt;Coupon&gt; coupons = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L21">        ResultSet resultSet = DatabaseOperations.getCoupons(ID);</span>
+
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        while (resultSet.next())</span>
+        {
+<span class="nc" id="L25">            coupons.add(</span>
+<span class="nc" id="L26">                    new Coupon(resultSet.getInt(1), resultSet.getString(2),</span>
+<span class="nc" id="L27">                            resultSet.getInt(3), resultSet.getDate(4),</span>
+<span class="nc" id="L28">                            resultSet.getString(5))</span>
+            );
+        }
+<span class="nc" id="L31">        return coupons;</span>
+    }
+
+    public static void useCoupon(int couponID, int clientID) throws SQLException {
+<span class="nc" id="L35">        DatabaseOperations.useCoupon(couponID, clientID);</span>
+<span class="nc" id="L36">    }</span>
+
+    public static int newDeliveryToHome(String address, double cost, LocalTime time, LocalDate date, String number) throws SQLException {
+<span class="nc" id="L39">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L40">        values.put(&quot;Adresas&quot;, address);</span>
+<span class="nc" id="L41">        values.put(&quot;Kaina&quot;, cost);</span>
+<span class="nc" id="L42">        values.put(&quot;Laikas&quot;, time);</span>
+<span class="nc" id="L43">        values.put(&quot;Data&quot;, date);</span>
+<span class="nc" id="L44">        values.put(&quot;TlNumeris&quot;, number);</span>
+<span class="nc" id="L45">        String newID = DatabaseOperations.newDeliveryToHome(values);</span>
+<span class="nc" id="L46">        return Integer.parseInt(newID);</span>
+    }
+
+    public static int newReservation(LocalTime time, LocalDate date, String spot, int restaurantID, int clientID) throws SQLException {
+<span class="nc" id="L50">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L51">        values.put(&quot;Laikas&quot;, time);</span>
+<span class="nc" id="L52">        values.put(&quot;Data&quot;, date);</span>
+<span class="nc" id="L53">        values.put(&quot;Vieta&quot;, spot);</span>
+<span class="nc" id="L54">        values.put(&quot;RestoranoID&quot;, restaurantID);</span>
+<span class="nc" id="L55">        values.put(&quot;KlientoID&quot;, clientID);</span>
+<span class="nc" id="L56">        String newID = DatabaseOperations.newReservation(values);</span>
+<span class="nc" id="L57">        return Integer.parseInt(newID);</span>
+    }
+
+
+
+    public static List&lt;Services&gt; getServices() throws SQLException {
+<span class="nc" id="L63">        List&lt;Services&gt; services = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L64">        ResultSet resultSet = DatabaseOperations.getServices();</span>
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        while (resultSet.next())</span>
+        {
+<span class="nc" id="L68">            services.add(</span>
+<span class="nc" id="L69">                    new Services(resultSet.getInt(1), resultSet.getString(2),</span>
+<span class="nc" id="L70">                            resultSet.getString(3), resultSet.getDouble(4))</span>
+            );
+        }
+<span class="nc" id="L73">        return services;</span>
+    }
+
+    public static int newServiceOrder(double cost, LocalDate date, LocalTime time, int restaurantID, int serviceID) throws SQLException {
+<span class="nc" id="L77">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L78">        values.put(&quot;Kaina&quot;, cost);</span>
+<span class="nc" id="L79">        values.put(&quot;Data&quot;, date);</span>
+<span class="nc" id="L80">        values.put(&quot;Laikas&quot;, time);</span>
+<span class="nc" id="L81">        values.put(&quot;RestoranoID&quot;, restaurantID);</span>
+<span class="nc" id="L82">        values.put(&quot;PaslaugosID&quot;, serviceID);</span>
+<span class="nc" id="L83">        String newID = DatabaseOperations.newServiceOrder(values);</span>
+<span class="nc" id="L84">        return Integer.parseInt(newID);</span>
+    }
+
+
+
+    public static String newOrder_Reservation(List&lt;FoodOrder&gt; totalOrder, LocalDate date, LocalTime time, String state,
+                                              int couponID, int reservationID, int clientID,
+                                              boolean orderFood, boolean useCoupon) throws SQLException {
+<span class="nc" id="L92">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L93">        values.put(&quot;Data&quot;, date);</span>
+<span class="nc" id="L94">        values.put(&quot;Laikas&quot;, time);</span>
+<span class="nc" id="L95">        values.put(&quot;Busena&quot;, state);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if(useCoupon)</span>
+<span class="nc" id="L97">            values.put(&quot;KlientoKuponoID&quot;, couponID);</span>
+<span class="nc" id="L98">        values.put(&quot;RezervacijosID&quot;, reservationID);</span>
+<span class="nc" id="L99">        values.put(&quot;KlientoID&quot;, clientID);</span>
+<span class="nc" id="L100">        String newID = DatabaseOperations.newOrder_Reservation(values);</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if(orderFood)</span>
+<span class="nc" id="L103">            FoodOrderServices.newFoodOrder(totalOrder, Integer.parseInt(newID));</span>
+<span class="nc" id="L104">        return newID;</span>
+
+    }
+
+    public static String newOrder_Service(LocalDate date, LocalTime time, String state,
+                                          int couponID, int serviceID, int clientID, boolean useCoupon) throws SQLException {
+<span class="nc" id="L110">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L111">        values.put(&quot;Data&quot;, date);</span>
+<span class="nc" id="L112">        values.put(&quot;Laikas&quot;, time);</span>
+<span class="nc" id="L113">        values.put(&quot;Busena&quot;, state);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if(useCoupon)</span>
+<span class="nc" id="L115">            values.put(&quot;KlientoKuponoID&quot;, couponID);</span>
+<span class="nc" id="L116">        values.put(&quot;PaslaugosID&quot;, serviceID);</span>
+<span class="nc" id="L117">        values.put(&quot;KlientoID&quot;, clientID);</span>
+<span class="nc" id="L118">        String newID = DatabaseOperations.newOrder_Service(values);</span>
+
+<span class="nc" id="L120">        return newID;</span>
+
+    }
+
+
+
+    public static String getReservation(int ID) throws SQLException {
+<span class="nc" id="L127">        ResultSet resultSet = DatabaseOperations.getReservation(ID);</span>
+<span class="nc" id="L128">        resultSet.next();</span>
+<span class="nc" id="L129">        String reservation  = &quot;Uzrezervuota &quot; + resultSet.getString(4) + &quot; vieta, &quot; + resultSet.getTime(2) +</span>
+<span class="nc" id="L130">                &quot; laiku, &quot; + resultSet.getDate(3) + &quot; diena.&quot;;</span>
+<span class="nc" id="L131">        return reservation;</span>
+    }
+
+    public static String getService(int serviceID) throws SQLException {
+<span class="nc" id="L135">        ResultSet resultSet = DatabaseOperations.getService(serviceID);</span>
+<span class="nc" id="L136">        resultSet.next();</span>
+<span class="nc" id="L137">        return &quot;Uzsakyta &quot; + resultSet.getString(1) + &quot; paslauga.&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

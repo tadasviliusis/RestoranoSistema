@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">data</a> &gt; <span class="el_source">DatabaseOperations.java</span></div><h1>DatabaseOperations.java</h1><pre class="source lang-java linenums">package data;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+
+<span class="nc" id="L7">public class DatabaseOperations {</span>
+
+    public static ResultSet getLogInCredentials() throws SQLException {
+<span class="nc" id="L10">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM programelesklientai&quot;);</span>
+<span class="nc" id="L11">        return resultSet;</span>
+    }
+
+    public static ResultSet getAppVersion() throws SQLException {
+<span class="nc" id="L15">        return MySQL.getData(&quot;SELECT MAX(ProgramelesID) FROM programele&quot;);</span>
+    }
+    
+    public static ResultSet getAllLoginNames() throws SQLException {
+<span class="nc" id="L19">        return MySQL.getData(&quot;SELECT all(PrisijungimoVardas) FROM programelesklientai&quot;);</span>
+    }
+
+    public static String createLoginCredentials(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L23">        String newID = MySQL.insertData(&quot;klientai&quot;, values);</span>
+<span class="nc" id="L24">        return newID;</span>
+    }
+
+    public static void createProfile(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L28">        MySQL.insertData(&quot;programelesklientai&quot;, values);</span>
+<span class="nc" id="L29">    }</span>
+
+    public static void updateUserInfo(Map&lt;String, Object&gt; newValues, Map&lt;String, Object&gt; whereValues) throws SQLException {
+<span class="nc" id="L32">        MySQL.updateData(&quot;klientai&quot;, newValues, whereValues);</span>
+<span class="nc" id="L33">    }</span>
+
+    public static void updateLoginInfo(Map&lt;String, Object&gt; newValues, Map&lt;String, Object&gt; whereValues) throws SQLException {
+<span class="nc" id="L36">        MySQL.updateData(&quot;programelesklientai&quot;, newValues, whereValues);</span>
+<span class="nc" id="L37">    }</span>
+
+    public static ResultSet getUserInfo(String login, String password) throws SQLException {
+<span class="nc" id="L40">        ResultSet resultSet = MySQL.getData(&quot;SELECT\n&quot; +</span>
+                &quot;klientai.* &quot; +
+                &quot;FROM programelesklientai &quot; +
+                &quot;INNER JOIN klientai &quot; +
+                &quot;ON programelesklientai.KlientoID = klientai.KlientoID &quot; +
+                &quot;WHERE programelesklientai.PrisijungimoVardas = '&quot; + login + &quot;' &quot; +
+                &quot;AND programelesklientai.Slaptazodis = '&quot; + password + &quot;' &quot; +
+                &quot;AND programelesklientai.KlientoID = klientai.KlientoID&quot;);
+<span class="nc" id="L48">        return resultSet;</span>
+    }
+    
+    public static ResultSet getLoginInfo(String id) throws SQLException {
+<span class="nc" id="L52">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM programelesklientai WHERE KlientoID = &quot; + id);</span>
+<span class="nc" id="L53">        return resultSet;</span>
+    }
+
+    public static ResultSet getRestaurantList() throws SQLException {
+<span class="nc" id="L57">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM restoranotinklas&quot;);</span>
+<span class="nc" id="L58">        return resultSet;</span>
+    }
+
+    public static ResultSet getRestaurantMenu(int restaurantID) throws SQLException {
+<span class="nc" id="L62">        ResultSet resultSet = MySQL.getData(</span>
+        &quot;SELECT &quot; +
+                &quot;meniu.PatiekaloID, &quot; +
+                &quot;meniu.Pavadinimas, &quot; +
+                &quot;meniu.Kaina, &quot; +
+                &quot;meniu.Aprasymas, &quot; +
+                &quot;maistokategorijos.Pavadinimas &quot; +
+                &quot;FROM meniu &quot; +
+                &quot;LEFT JOIN maistokategorijos &quot; +
+                &quot;ON meniu.KategorijosID = maistokategorijos.KategorijosID &quot; +
+                &quot;WHERE meniu.RestoranoID = &quot; + restaurantID + &quot;&quot;);
+<span class="nc" id="L73">        return resultSet;</span>
+    }
+
+    public static ResultSet getCoupons(int ID) throws SQLException {
+<span class="nc" id="L77">        ResultSet resultSet = MySQL.getData(</span>
+                &quot;SELECT &quot; +
+                        &quot;nuolaidukuponai.KuponoID, &quot; +
+                        &quot;nuolaidukuponai.Pavadinimas, &quot; +
+                        &quot;nuolaidukuponai.Nuolaida, &quot; +
+                        &quot;nuolaidukuponai.GaliojimoLaikotarpis, &quot; +
+                        &quot;klientokuponai.Busena &quot; +
+                        &quot;FROM nuolaidukuponai &quot; +
+                        &quot;INNER JOIN klientokuponai &quot; +
+                        &quot;ON nuolaidukuponai.KuponoID = klientokuponai.KuponoID &quot; +
+                        &quot;WHERE klientokuponai.KlientoID = '&quot; + ID + &quot;'&quot;);
+<span class="nc" id="L88">        return resultSet;</span>
+    }
+
+    public static void useCoupon(int couponID, int clientID) throws SQLException {
+<span class="nc" id="L92">    MySQL.deleteData(&quot;DELETE FROM klientokuponai WHERE KuponoID = '&quot; + couponID + &quot;' AND KlientoID = '&quot; + clientID + &quot;'&quot;);</span>
+<span class="nc" id="L93">    }</span>
+
+    public static String newDeliveryToHome(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L96">        String newID = MySQL.insertData(&quot;pristatymasinamus&quot;, values);</span>
+<span class="nc" id="L97">        return newID;</span>
+    }
+
+    public static void newFoodOrder(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L101">        String newID = MySQL.insertData(&quot;maistouzsakymas&quot;, values);</span>
+<span class="nc" id="L102">    }</span>
+
+    public static String newReservation(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L105">        String newID = MySQL.insertData(&quot;rezervacijos&quot;, values);</span>
+<span class="nc" id="L106">        return newID;</span>
+    }
+
+    public static ResultSet getServices() throws SQLException {
+<span class="nc" id="L110">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM restoranopaslaugos&quot;);</span>
+<span class="nc" id="L111">        return resultSet;</span>
+    }
+
+    public static String newServiceOrder(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L115">        String newID = MySQL.insertData(&quot;paslaugosuzsakymas&quot;, values);</span>
+<span class="nc" id="L116">        return newID;</span>
+
+
+    }
+    public static String newOrder_Food(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L121">        String newID = MySQL.insertData(&quot;klientouzsakymas&quot;, values);</span>
+<span class="nc" id="L122">        return newID;</span>
+
+    }
+
+    public static String newOrder_Reservation(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L127">        String newID = MySQL.insertData(&quot;klientouzsakymas&quot;, values);</span>
+<span class="nc" id="L128">        return newID;</span>
+    }
+
+    public static String newOrder_Service(Map&lt;String, Object&gt; values) throws SQLException {
+<span class="nc" id="L132">        String newID = MySQL.insertData(&quot;klientouzsakymas&quot;, values);</span>
+<span class="nc" id="L133">        return newID;</span>
+
+    }
+
+
+    public static ResultSet getOrders(String id) throws SQLException {
+<span class="nc" id="L139">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM klientouzsakymas WHERE KlientoID = &quot; + id);</span>
+<span class="nc" id="L140">        return resultSet;</span>
+    }
+
+    public static void cancelOrder(Map&lt;String, Object&gt; newValues, Map&lt;String, Object&gt; whereValues) throws SQLException {
+<span class="nc" id="L144">        MySQL.updateData(&quot;klientouzsakymas&quot;, newValues, whereValues);</span>
+<span class="nc" id="L145">    }</span>
+
+    public static ResultSet getReservation(int ID) throws SQLException {
+<span class="nc" id="L148">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM rezervacijos WHERE RezervacijosID = '&quot; + ID + &quot;'&quot;);</span>
+<span class="nc" id="L149">        return resultSet;</span>
+    }
+
+    public static ResultSet getService(int serviceID) throws SQLException {
+<span class="nc" id="L153">        ResultSet resultSet = MySQL.getData(</span>
+                &quot;SELECT &quot; +
+                        &quot;restoranopaslaugos.Pavadinimas &quot; +
+                        &quot;FROM paslaugosuzsakymas &quot; +
+                        &quot;INNER JOIN restoranopaslaugos &quot; +
+                        &quot;ON paslaugosuzsakymas.PaslaugosID = restoranopaslaugos.PaslaugosID &quot; +
+                        &quot;WHERE paslaugosuzsakymas.UzsakymoID = '&quot; + serviceID + &quot;' &quot; +
+                        &quot;AND restoranopaslaugos.PaslaugosID = paslaugosuzsakymas.PaslaugosID&quot;
+
+        );
+<span class="nc" id="L163">        return resultSet;</span>
+    }
+
+    public static ResultSet getFoodOrder(int orderID) throws SQLException {
+<span class="nc" id="L167">        ResultSet resultSet = MySQL.getData(</span>
+                &quot;SELECT &quot; +
+                        &quot;maistouzsakymas.*, &quot; +
+                        &quot;meniu.Pavadinimas &quot; +
+                        &quot;FROM maistouzsakymas &quot; +
+                        &quot;LEFT JOIN meniu &quot; +
+                        &quot;ON meniu.PatiekaloID = maistouzsakymas.PatiekaloID &quot; +
+                        &quot;WHERE maistouzsakymas.KlientoUzsakymoID = '&quot; + orderID + &quot;'&quot;);
+<span class="nc" id="L175">        return resultSet;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

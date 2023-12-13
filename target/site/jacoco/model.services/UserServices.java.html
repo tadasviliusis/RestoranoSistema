@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MYSQLTEST</a> &gt; <a href="index.source.html" class="el_package">model.services</a> &gt; <span class="el_source">UserServices.java</span></div><h1>UserServices.java</h1><pre class="source lang-java linenums">package model.services;
+
+import data.DatabaseOperations;
+import data.MySQL;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L13">public class UserServices {</span>
+
+    public static ResultSet getLogInCredentials() throws SQLException {
+<span class="nc" id="L16">        ResultSet resultSet = MySQL.getData(&quot;SELECT * FROM programelesklientai&quot;);</span>
+<span class="nc" id="L17">        return resultSet;</span>
+    }
+
+    public static boolean checkLogInCredentials(String login, String password) throws SQLException {
+<span class="nc" id="L21">        ResultSet resultSet = DatabaseOperations.getLogInCredentials();</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        while (resultSet.next()){</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">            if(resultSet.getString(&quot;PrisijungimoVardas&quot;).equals(login) &amp;&amp;</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">                    resultSet.getString(&quot;Slaptazodis&quot;).equals(password))</span>
+<span class="nc" id="L25">                return true;</span>
+        }
+<span class="nc" id="L27">        return false;</span>
+    }
+    
+    public static List&lt;String&gt; getAllLoginNames() throws SQLException {
+<span class="nc" id="L31">        ResultSet resultSet = DatabaseOperations.getAllLoginNames();</span>
+<span class="nc" id="L32">        List&lt;String&gt; loginNames = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        while (resultSet.next()){</span>
+<span class="nc" id="L34">            loginNames.add(resultSet.getString(&quot;PrisijungimoVardas&quot;));</span>
+        }
+<span class="nc" id="L36">        return loginNames;</span>
+    }
+
+    public static void createNewUser(String name, String lastName, String number, String mail, String address, String login, String password) throws SQLException {
+<span class="nc" id="L40">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L41">        values.put(&quot;Vardas&quot;, name);</span>
+<span class="nc" id="L42">        values.put(&quot;Pavarde&quot;, lastName);</span>
+<span class="nc" id="L43">        values.put(&quot;TlNumeris&quot;, number);</span>
+<span class="nc" id="L44">        values.put(&quot;ElPastas&quot;, mail);</span>
+<span class="nc" id="L45">        values.put(&quot;Adresas&quot;, address);</span>
+
+<span class="nc" id="L47">        String newID = DatabaseOperations.createLoginCredentials(values);</span>
+
+<span class="nc" id="L49">        values.clear();</span>
+<span class="nc" id="L50">        ResultSet resultSet = DatabaseOperations.getAppVersion();</span>
+<span class="nc" id="L51">        resultSet.next();</span>
+
+<span class="nc" id="L53">        values.put(&quot;PrisijungimoVardas&quot;, login);</span>
+<span class="nc" id="L54">        values.put(&quot;Slaptazodis&quot;, password);</span>
+<span class="nc" id="L55">        values.put(&quot;ProgramelesID&quot;, resultSet.getInt(1));</span>
+<span class="nc" id="L56">        values.put(&quot;KlientoID&quot;, newID);</span>
+<span class="nc" id="L57">        DatabaseOperations.createProfile(values);</span>
+<span class="nc" id="L58">    }</span>
+
+    public static void updateUserInfo(Object ID, String name, String lastName, String number, String mail, String address) throws SQLException {
+<span class="nc" id="L61">        Map&lt;String, Object&gt; newValues = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L62">        newValues.put(&quot;Vardas&quot;, name);</span>
+<span class="nc" id="L63">        newValues.put(&quot;Pavarde&quot;, lastName);</span>
+<span class="nc" id="L64">        newValues.put(&quot;TlNumeris&quot;, number);</span>
+<span class="nc" id="L65">        newValues.put(&quot;ElPastas&quot;, mail);</span>
+<span class="nc" id="L66">        newValues.put(&quot;Adresas&quot;, address);</span>
+
+<span class="nc" id="L68">        Map&lt;String, Object&gt; whereValues = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L69">        whereValues.put(&quot;KlientoID&quot;,ID);</span>
+<span class="nc" id="L70">        DatabaseOperations.updateUserInfo(newValues, whereValues);</span>
+
+<span class="nc" id="L72">    }</span>
+
+    public static void updateLoginInfo(Object ID, String login, String password) throws SQLException {
+<span class="nc" id="L75">        Map&lt;String, Object&gt; newValues = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L76">        newValues.put(&quot;PrisijungimoVardas&quot;, login);</span>
+<span class="nc" id="L77">        newValues.put(&quot;Slaptazodis&quot;, password);</span>
+
+<span class="nc" id="L79">        Map&lt;String, Object&gt; whereValues = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L80">        whereValues.put(&quot;KlientoID&quot;,ID);</span>
+<span class="nc" id="L81">        DatabaseOperations.updateLoginInfo(newValues, whereValues);</span>
+<span class="nc" id="L82">    }</span>
+
+    public static Map&lt;String, Object&gt; getUserInfo(String login, String password) throws SQLException {
+<span class="nc" id="L85">        ResultSet resultSet = DatabaseOperations.getUserInfo(login, password);</span>
+<span class="nc" id="L86">        resultSet.next();</span>
+<span class="nc" id="L87">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L88">        values.put(&quot;ID&quot;, resultSet.getInt(1));</span>
+<span class="nc" id="L89">        values.put(&quot;vardas&quot;, resultSet.getString(2));</span>
+<span class="nc" id="L90">        values.put(&quot;pavarde&quot;, resultSet.getString(3));</span>
+<span class="nc" id="L91">        values.put(&quot;tl.numeris&quot;, resultSet.getString(4));</span>
+<span class="nc" id="L92">        values.put(&quot;el.pastas&quot;, resultSet.getString(5));</span>
+<span class="nc" id="L93">        values.put(&quot;adresas&quot;, resultSet.getString(6));</span>
+<span class="nc" id="L94">        return values;</span>
+    }
+
+    public static Map&lt;String, Object&gt; getLoginInfo(String id) throws SQLException {
+<span class="nc" id="L98">        ResultSet resultSet = DatabaseOperations.getLoginInfo(id);</span>
+<span class="nc" id="L99">        resultSet.next();</span>
+<span class="nc" id="L100">        Map&lt;String, Object&gt; values = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L101">        values.put(&quot;ID&quot;, resultSet.getInt(1));</span>
+<span class="nc" id="L102">        values.put(&quot;login&quot;, resultSet.getString(2));</span>
+<span class="nc" id="L103">        values.put(&quot;password&quot;, resultSet.getString(3));</span>
+<span class="nc" id="L104">        return values;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
